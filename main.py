@@ -4,6 +4,8 @@ from discord.ext import commands
 from bs4 import BeautifulSoup
 import poem_scraper
 
+port = os.getenv('PORT') # render stuff
+
 intents = discord.Intents.default()
 intents.message_content = True
 
