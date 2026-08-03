@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 
 BASE_URL = "https://www.poemas-del-alma.com"
-SITEMAP_URL = f"{BASE_URL}/sitemap.php?pag={random.randint(1, 51)}"
+
 
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 
@@ -32,7 +32,7 @@ def is_poem_url(url):
 
 def extract_poem_links():
     links = set()
-    html = fetch_html(SITEMAP_URL)
+    html = fetch_html(f"{BASE_URL}/sitemap.php?pag={random.randint(1, 51)}")
     soup = BeautifulSoup(html, "html.parser")
 
     for anchor in soup.find_all("a", href=True):
