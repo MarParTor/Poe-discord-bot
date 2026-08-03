@@ -16,6 +16,8 @@ async def ping(ctx):
 @bot.command()
 async def poe(ctx):
     p = poem_scraper.get_poem()
+    while p.len(p) > 4000: # discord no acepta mensjes de más de 4000 caracteres
+        p = poem_scraper.get_poem()
     mensaje = await ctx.reply(p)
     await mensaje.add_reaction('⬆️')
     await mensaje.add_reaction('⬇️')
