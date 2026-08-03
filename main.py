@@ -1,7 +1,7 @@
+import os
 import discord
 from discord.ext import commands
 from bs4 import BeautifulSoup
-import bot_secrets
 import poem_scraper
 
 intents = discord.Intents.default()
@@ -25,5 +25,5 @@ async def on_ready():
     print(f'Bot conectado como {bot.user.name} (ID: {bot.user.id})')
 
 
-bot.run(bot_secrets.BOT_TOKEN)
+bot.run(os.getenv('BOT_TOKEN'))
 
