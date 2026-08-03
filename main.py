@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-import requests
 from bs4 import BeautifulSoup
 import bot_secrets
 import poem_scraper
