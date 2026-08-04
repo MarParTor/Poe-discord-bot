@@ -3,8 +3,7 @@ import discord
 from discord.ext import commands
 from bs4 import BeautifulSoup
 import poem_scraper
-
-port = os.getenv('PORT') # render stuff
+import webserver
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -17,10 +16,10 @@ async def ping(ctx):
 
 @bot.command()
 async def poe(ctx):
-    p = poem_scraper.get_poem()
-    while len(p) > 2000: # discord no acepta mensjes de más de 2000 caracteres
-        p = poem_scraper.get_poem()
-    mensaje = await ctx.reply(p)
+    poem = poem_scraper.get_poem()
+    while len(poem) > 2000: # discord no acepta mensjes de más de 2000 caracteres
+        poem = poem_scraper.get_poem()
+    mensaje = await ctx.reply(poem)
     await mensaje.add_reaction('⬆️')
     await mensaje.add_reaction('⬇️')
 
@@ -28,6 +27,6 @@ async def poe(ctx):
 async def on_ready():
     print(f'Bot conectado como {bot.user.name} (ID: {bot.user.id})')
 
-
+webserver.keep_alive()
 bot.run(os.getenv('BOT_TOKEN'))
 
