@@ -15,7 +15,6 @@ def fetch_html(url):
     response.raise_for_status()
     return response.text
 
-
 def normalize_url(url):
     if url.startswith("/"):
         return f"{BASE_URL}{url}"
