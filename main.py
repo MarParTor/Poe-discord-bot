@@ -140,6 +140,4 @@ async def on_ready():
 
 
 webserver.keep_alive()
-import bot_secrets
-bot.run(bot_secrets.BOT_TOKEN)
-#bot.run(os.getenv('BOT_TOKEN'))
+bot.run(os.getenv('BOT_TOKEN'))
