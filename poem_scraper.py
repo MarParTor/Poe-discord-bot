@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 
 BASE_URL = "https://www.poemas-del-alma.com"
 
-
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 
@@ -15,7 +14,6 @@ def fetch_html(url):
     response = requests.get(url, headers=HEADERS, timeout=20)
     response.raise_for_status()
     return response.text
-
 
 def normalize_url(url):
     if url.startswith("/"):
