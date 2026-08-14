@@ -11,7 +11,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='$', intents=intents, help_command=None)
 
 # Almacena la configuración de cada servidor por separado.
-# guild_data[guild_id] = {'channel': discord.TextChannel, 'task': tasks.Loop}
+# guild_data[guild_id] = {'channel': discord.TextChannel, 'task': tasks.Loop, 'poe_allowed': bool}
 guild_data = {}
 
 
@@ -28,14 +28,14 @@ async def send_poem(context, reply=False):
 
 
 def get_guild_entry(guild_id):
-    """Crea (si no existe) y devuelve la entrada de configuración de un servidor."""
+    #Crea (si no existe) y devuelve la entrada de configuración de un servidor.
     if guild_id not in guild_data:
-        guild_data[guild_id] = {'channel': None, 'task': None}
+        guild_data[guild_id] = {'channel': None, 'task': None, 'poe_allowed': True}
     return guild_data[guild_id]
 
 
 def create_guild_task(guild_id):
-    """Crea una tarea (tasks.Loop) independiente para el servidor indicado."""
+    #Crea una tarea (tasks.Loop) independiente para el servidor indicado.
 
     @tasks.loop(minutes=1)
     async def scheduled_poem_task():
@@ -51,6 +51,8 @@ async def help(ctx):
     help_message = (
         "```Comandos disponibles:\n"
         "$poe - Envía un poema aleatorio.\n"
+        "$allowPoe - Activa el comando $poe. (solo administación)\n"
+        "$disallowPoe - Desactiva el comando $poe. (solo administación)\n"
         "\n --Automatización-- (solo para administración) \n\n"
         "$changePoemInterval <minutos> - Cambia el intervalo de envío automático de poemas (mínimo 1 minuto).\n"
         "- 24h -> 1440 minutos.\n"
@@ -63,8 +65,30 @@ async def help(ctx):
 
 
 @bot.command(help="Envía un poema aleatorio.")
+@commands.guild_only()
 async def poe(ctx):
+    entry = get_guild_entry(ctx.guild.id)
+    if not entry['poe_allowed']:
+        return
     await send_poem(ctx, reply=True)
+
+
+@bot.command(help="Activa el comando $poe.")
+@commands.has_permissions(administrator=True)
+@commands.guild_only()
+async def allowPoe(ctx):
+    entry = get_guild_entry(ctx.guild.id)
+    entry['poe_allowed'] = True
+    await ctx.reply('El comando $poe ha sido activado.')
+
+
+@bot.command(help="Desactiva el comando $poe.")
+@commands.has_permissions(administrator=True)
+@commands.guild_only()
+async def disallowPoe(ctx):
+    entry = get_guild_entry(ctx.guild.id)
+    entry['poe_allowed'] = False
+    await ctx.reply('El comando $poe ha sido desactivado.')
 
 
 @bot.command(help="Cambia el intervalo de envío automático de poemas (mínimo 1 minuto).")

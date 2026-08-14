@@ -54,7 +54,7 @@ def extract_title_and_author(html):
     return title, author
 
 
-def extract_poem_text(html, author_name):
+def extract_poem_text(html):
     soup = BeautifulSoup(html, "html.parser")
     poem_entry = soup.select_one("div.poem-entry")
 
@@ -79,7 +79,7 @@ def get_poem():
         return
 
     title, author = extract_title_and_author(html)
-    poem_text = extract_poem_text(html, author)
+    poem_text = extract_poem_text(html)
     poem_text = poem_text if poem_text else "No se pudo extraer el texto del poema."
     poem_text = poem_text.replace("<br/><br/>", "\n").replace("<br><br>", "\n").replace("<br/>", "").replace("<br>", "").replace("<p>", "").replace("</p>", "\n").replace("<i>", "*").replace("</i>", "*")
     poem_text = poem_text.split('<div class="likebox">')[0].strip()
